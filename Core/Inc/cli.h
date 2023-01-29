@@ -30,16 +30,16 @@ typedef struct
     Command_Typedef *commands;
 } Shell_TypeDef;
 
-void shell_Init(Shell_TypeDef *shell);
+void CLI_Init(Shell_TypeDef *shell);
 int isWhitespace(uint8_t ch);
 int isPunctuation(uint8_t ch);
 int isAlphaNumeric(uint8_t ch);
 int isPrintable(uint8_t ch);
-int cli_strcompare(char* s, char* t);
-char* mystrcat( char* dest, char* src);
-int stringToArgv(char* src, char *argv[]);
+int CLI_strcmp(char* s, char* t);
+char* CLI_strcat( char* dest, char* src);
+int CLI_StringToArgv(char* src, char *argv[]);
 int strlen(char *src);
-void cli_process(Shell_TypeDef *shell);
-void readFromShell(Shell_TypeDef *shell);
+void CLI_Process(Shell_TypeDef *shell);
+void CLI_ReadCharacter(Shell_TypeDef *shell);
 
 #endif /* STM32_CLI_H */

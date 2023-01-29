@@ -7,8 +7,6 @@ Core/Src/*
 Core/Inc/*
 !Core/*/cli.c
 !Core/*/cli.h
-!Makefile
 
 # Mac-OS Desktop Services Store files
 .DS_Store
-
