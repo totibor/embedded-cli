@@ -23,7 +23,7 @@ void CLI_Process(Shell_TypeDef *shell)
 
     shell->readyToRead = 0;
 
-    // If user just hit enter without provideing commang just print a new line in CLI
+    // If user just hit enter without providing a command then print a new line in CLI
     if (shell->charCount == 0)
     {
         shell->cli_print("\r\n> ");
