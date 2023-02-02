@@ -39,12 +39,13 @@ int main(void)
 }
 ```
 
-You can use `shell->cli_print` in your file where you included cli.h to print to the shell.
+You can use `shell.cli_print` in your file where you included cli.h to print to the shell.
 ```c
-shell->cli_print("\r\nCLI for STM32, v0.1\r\n> ");
+shell.cli_print("\r\nCLI for STM32, v0.1\r\n> ");
 ```
 
-The wrapper function around `HAL_UART_Transmit` provided by HAL library. The command-line interface API is written such a way that the wrapper function expects only one null-terminated string argument. `huart2` is the initialization structure used by HAL.
+
+Wrapper for HAL library function `HAL_UART_Transmit`. The command-line interface API is written such a way that the wrapper function expects only one null-terminated string argument. `huart2` is the initialization structure for UART peripheral and CLI_UART_SEND_TIMEOUT is the set timeout in cli.h file.
 ```c
 void HAL_UART_Transmit_wraper(char *message)
 {
@@ -52,7 +53,7 @@ void HAL_UART_Transmit_wraper(char *message)
 }
 ```
 
-Interrupt handler called when the provided amount of bytes recieved. By default the recieve ammount is one so this callback called every time the user hits a key. `HAL_UART_Receive_IT` must be called again to recieve next character.
+At reception end of transfer `HAL_UART_RxCpltCallback` is executed. Reception end depends when RX buffer provided for  `HAL_UART_Receive_IT` is full. `HAL_UART_Receive_IT` must be called again to start recieve characters. In current implementation RX buffer is a one element long array so `HAL_UART_RxCpltCallback` executes for every keystroke.
 ```c
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
