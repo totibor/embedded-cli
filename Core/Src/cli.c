@@ -10,6 +10,12 @@
 
 #include "cli.h"
 
+static int CLI_StringToArgv(char* src, char *argv[]);
+
+#define NUMBER_OF_MAX_CMD_ARGS 10       /* 1 command plus 9 command arguments */
+#define BACKSPACE_KEY 127               /* ASCII code sent when user hits backsapce key */
+#define ENTER_KEY '\r'                  /* Character or character combination when user hits enter key */  
+
 /**
  * @brief Match user input to command from command list and execute function assoicated with matching command.
  * This function is called periodacially in main function.
@@ -38,7 +44,7 @@ void CLI_Process(Shell_TypeDef *shell)
 
     for (Command_Typedef *command = firstCommand; command <= lastCommand; command++)
     {
-        if (!CLI_strcmp(argv[0], command->name))
+        if (!strcmp(argv[0], command->name))
         {
             shell->charCount = 0;
             command->handler(argc, argv);
@@ -79,7 +85,7 @@ void CLI_ReadCharacter(Shell_TypeDef *shell)
         return;
     }
 
-    if (!isPrintable(*recentCharacter))
+    if (!isprint(*recentCharacter))
         return;
 
     shell->inputBuffer[shell->charCount++] = (char)*recentCharacter;
@@ -97,7 +103,7 @@ void CLI_ReadCharacter(Shell_TypeDef *shell)
  * @param argv Array to hold the command and it's arguments.
  * @return int Number of arguments (including the command).
  */
-int CLI_StringToArgv(char *src, char *argv[])
+static int CLI_StringToArgv(char *src, char *argv[])
 {
     // First argument is the name of the command.
     int argc = 1;
@@ -134,110 +140,3 @@ void CLI_Init(Shell_TypeDef *shell)
     shell->readyToRead = 0;
     shell->cli_print("\r\nCLI for STM32, v0.1\r\n> ");
 }
-
-/**
- * @brief Check if character is tab or whitespace character.
- * 
- * @param ch Character to test.
- * @return True if character is tab or whitespace, false otherwies.
- */
-int isWhitespace(uint8_t ch)
-{
-    if (ch == '\t' || ch == ' ')
-        return 1;
-
-    return 0;
-}
-
-/**
- * @brief Check if character is punctuation.
- * 
- * @param ch Character to test.
- * @return True if character is punctuation, false otherwies.
- */
-int isPunctuation(uint8_t ch)
-{
-    if (ch == ' ' || ch == '!' || ch == '\"' || ch == '#' || ch == '$' || ch == '%' || ch == '&' || ch == '\'' || ch == '(' || ch == ')' || ch == '*' || ch == '+' || ch == ',' || ch == '-' || ch == '.' || ch == '/' || ch == ':' || ch == ';' || ch == '<' || ch == '=' || ch == '>' || ch == '?' || ch == '@' || ch == '[' || ch == '\\' || ch == ']' || ch == '^' || ch == '`' || ch == '{' || ch == '|' || ch == '}')
-        return 1;
-
-    return 0;
-}
-
-/**
- * @brief Check if character is alphanumeric.
- * 
- * @param ch Character to test.
- * @return True if character is alphanumeric, false otherwies.
- */
-int isAlphaNumeric(uint8_t ch)
-{
-    if (((ch >= '0') & (ch <= '9')) || ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z')))
-        return 1;
-
-    return 0;
-}
-
-/**
- * @brief Check if character is a printable character.
- * 
- * @param ch Character to test.
- * @return True if character is alphanumeric, false otherwies.
- */
-int isPrintable(uint8_t ch)
-{
-    if (isAlphaNumeric(ch) || isPunctuation(ch) || isWhitespace(ch))
-        return 1;
-    return 0;
-}
-
-/**
- * @brief Lexicographically compare the null-terminated strings.
- * 
- * @param s String to compare.
- * @param t String to compare.
- * @return Return an integer greater than, equal to, or less than 
- * 0, according as the string s is greater than, equal to, or
- * less than the string t.
- */
-int CLI_strcmp(char *s, char *t)
-{
-    for (; *s == *t; s++, t++)
-    {
-        if (*s == '\0')
-        {
-            return 0;
-        }
-    }
-    return *s - *t;
-}
-
-/**
- * @brief Append a copy of the null-terminated string src to the end of the null-terminated string dest.
- * 
- * @param dest String to append to.
- * @param src String to append.
- * @return char* Pointer to end of dest string.
- */
-char *CLI_strcat(char *dest, char *src)
-{
-    while (*dest)
-        dest++;
-    while (*dest++ = *src++)
-        ;
-    return --dest;
-}
-
-/**
- * @brief Find length of string.
- * 
- * @param src String whose length needs to calculated.
- * @return int Number of characters that precede the terminating NULL character.
- */
-int strlen(char *src)
-{
-    int length = 0;
-    while (*src++)
-        length++;
-    return length;
-}
-
