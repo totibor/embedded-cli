@@ -10,15 +10,17 @@
 
 #include "cli.h"
 
-static int CLI_StringToArgv(char* src, char *argv[]);
+static int CLI_StringToArgv(char *src, char *argv[]);
 
-#define NUMBER_OF_MAX_CMD_ARGS 10       /* 1 command plus 9 command arguments */
-#define BACKSPACE_KEY 127               /* ASCII code sent when user hits backsapce key */
-#define ENTER_KEY '\r'                  /* Character or character combination when user hits enter key */  
+/* 1 command plus 9 command arguments */
+#define NUMBER_OF_MAX_CMD_ARGS 10
+/* ASCII code sent when user hits backsapce key */
+#define BACKSPACE_KEY 127
+/* Character or character combination when user hits enter key */
+#define ENTER_KEY '\r'
 
 /**
- * @brief Match user input to command from command list and execute function assoicated with matching command.
- * This function is called periodacially in main function.
+ * @brief Execute function assoicated with matching command.
  *
  * @param shell Instance of a shell
  */
@@ -29,7 +31,8 @@ void CLI_Process(Shell_TypeDef *shell)
 
     shell->readyToRead = 0;
 
-    // If user just hit enter without providing a command then print a new line in CLI
+    /* If user just hit enter without providing a command then
+    print a new line in CLI */
     if (shell->charCount == 0)
     {
         shell->cli_print("\r\n> ");
@@ -59,8 +62,7 @@ void CLI_Process(Shell_TypeDef *shell)
 }
 
 /**
- * @brief Process character input from shell's input. Called in interrupt handler
- * called when one character recieve is complete.
+ * @brief Process character input from shell's input.
  *
  * @param shell Instance of a shell
  */
@@ -98,7 +100,7 @@ void CLI_ReadCharacter(Shell_TypeDef *shell)
 
 /**
  * @brief Split command line input string into a command and it's arguments.
- * 
+ *
  * @param src Command line input string.
  * @param argv Array to hold the command and it's arguments.
  * @return int Number of arguments (including the command).
@@ -129,9 +131,8 @@ static int CLI_StringToArgv(char *src, char *argv[])
 }
 
 /**
- * @brief Inintialize the shell to its default state. Function to print to shell, an array
- * of commands and number of command must be provided by user of this API.
- * 
+ * @brief Inintialize the shell to its default state.
+ *
  * @param shell Instance of a shell
  */
 void CLI_Init(Shell_TypeDef *shell)
