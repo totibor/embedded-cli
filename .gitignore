@@ -7,6 +7,8 @@ Core/Src/*
 Core/Inc/*
 !Core/*/cli.c
 !Core/*/cli.h
+!Core/*/syscalls.c
+!Core/*/syscalls.h
 
 # Mac-OS Desktop Services Store files
 .DS_Store
