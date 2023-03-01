@@ -84,6 +84,8 @@ You can call stdio functions now on. `stdin` and `stdout` reffers to the UART li
 ```c
 int main(void)
 {
+  char buf[10];
+  
   printf("\r\nYour name: ");
   fgets(buf, sizeof(buf), stdin);
   printf("\r\nHello, %s!\r\n", buf);
