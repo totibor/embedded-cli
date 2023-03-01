@@ -2,7 +2,7 @@
  Simple command-line interface for embedded devices. It is able to invoke functions on the device. 
 
 ## Integration
-Provided example is for STM32 microcontroller.
+> Provided example was tested on STM32F103 Nucleo board and with HAL library.
 
 Copy cli.c and cli.h files into your project then include the provided header file.
 ```c
@@ -30,12 +30,12 @@ In your `main` function call `HAL_UART_Receive_IT` with the recieve buffer provi
 ```c
 int main(void)
 {
-    HAL_UART_Receive_IT(&huart2, shell.UART_RxBuffer, sizeof(shell.UART_RxBuffer));
+  HAL_UART_Receive_IT(&huart2, shell.UART_RxBuffer, sizeof(shell.UART_RxBuffer));
 
-    while (1)
-    {
-        CLI_Process(&shell);
-    }
+  while (1)
+  {
+    CLI_Process(&shell);
+  }
 }
 ```
 
@@ -65,3 +65,27 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 ```
 
+## stdio functions (with STM32 and HAL library)
+It is possible to use `printf` and `scanf` functions on embedded devices. The C standard library depends on subrutine calls for operating system services. In case of bare metal programming there is no OS to provide these definitons so these have to be defined. At least empty stubs should be provided with the C cross compiler used so it can compile without any error.
+
+Essential subrutine definitions for serial IO communication are provided in syscalls.c
+
+To use `printf` and `scanf` in your program include syscalls.h
+```c
+#include "syscalls.h"
+```
+
+Call the init function with the UART handle used for communcation.
+```c
+syscallsInit(&huart2);
+```
+
+You can call stdio functions now on. `stdin` and `stdout` reffers to the UART line initalized with `syscallsInit`.
+```c
+int main(void)
+{
+  printf("\r\nYour name: ");
+  fgets(buf, sizeof(buf), stdin);
+  printf("\r\nHello, %s!\r\n", buf);
+}
+```
